@@ -1,0 +1,12 @@
+anndata
+Jinja2
+matplotlib
+numpy
+pandas
+scanpy>=1.5.1
+scikit-learn
+scipy
+statsmodels
+tqdm
+xlrd
+XlsxWriter
