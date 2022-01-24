@@ -52,8 +52,9 @@ def internal_preprocessing(
     genes = set(ds1.adata.var_names) & set(ds2.adata.var_names)
     if features_file is not None:
         features = read_features(features_file)
-        genes = list(genes & set(features))
+        genes = genes & set(features)
         logging.info(f"Reading list of genes from {features_file} => {len(genes)}")
+    genes = list(genes)
 
     if len(genes) == 0:
         logging.error(f"No common genes found ...")
