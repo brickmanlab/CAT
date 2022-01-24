@@ -67,6 +67,12 @@ def main():
         help="Gene column, using `index` as default",
     )
     parser.add_argument(
+        "--features",
+        type=str,
+        default=None,
+        help="File containing list of genes on new lines",
+    )
+    parser.add_argument(
         "--output",
         type=str,
         default="./results",

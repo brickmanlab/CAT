@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+from cmath import log
 from typing import Any, Dict, List, Optional, Tuple
 
 import anndata
@@ -8,11 +9,12 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy
+from pyexpat import features
 from tqdm import tqdm
 
 from .dataset import Dataset
 from .report import generate_tables, save_tables
-from .utils import get_nz_median
+from .utils import get_nz_median, read_features
 
 
 def normalize(mat: np.ndarray, method="median"):
@@ -22,7 +24,8 @@ def normalize(mat: np.ndarray, method="median"):
         nzm[~np.isfinite(nzm)] = 1
         return mat / nzm
 
-    raise ValueError(f"Normalization method {method} not implemented!")
+    logging.error(f"Normalization method {method} not implemented!")
+    sys.exit(1)
 
 
 def sample_cells(adata: anndata.AnnData, replace: bool = True):
@@ -37,7 +40,7 @@ def sample_cells(adata: anndata.AnnData, replace: bool = True):
 
 
 def internal_preprocessing(
-    ds1: Dataset, ds2: Dataset, re_normalize: bool = True
+    ds1: Dataset, ds2: Dataset, features_file: Optional[str], re_normalize: bool = True
 ) -> Tuple[Dataset, Dataset]:
     """The internal preprocessing of the CAT algorithm.
     ensures that data is in the right shape and format.
@@ -46,14 +49,20 @@ def internal_preprocessing(
     logging.info(f"Before {ds1.name}: {ds1.adata.shape}")
     logging.info(f"Before {ds2.name}: {ds2.adata.shape}")
 
-    common_genes = list(set(ds1.adata.var_names) & set(ds2.adata.var_names))
-    if len(common_genes) == 0:
-        raise f"No common genes found ..."
-    elif len(common_genes) < 20:
+    genes = set(ds1.adata.var_names) & set(ds2.adata.var_names)
+    if features_file is not None:
+        features = read_features(features_file)
+        genes = list(genes & set(features))
+        logging.info(f"Reading list of genes from {features_file} => {len(genes)}")
+
+    if len(genes) == 0:
+        logging.error(f"No common genes found ...")
+        sys.exit(1)
+    elif len(genes) < 20:
         logging.warning("Only <20 genes are common ...")
     else:
-        ds1.adata = ds1.adata[:, common_genes].copy()
-        ds2.adata = ds2.adata[:, common_genes].copy()
+        ds1.adata = ds1.adata[:, genes].copy()
+        ds2.adata = ds2.adata[:, genes].copy()
 
     logging.info(f"After {ds1.name}: {ds1.adata.shape}")
     logging.info(f"After {ds2.name}: {ds2.adata.shape}")
@@ -187,6 +196,7 @@ def run(args: argparse.Namespace):
     settings: Dict[str, Any] = {
         "dataset1": [args.ds1, ds1_name, args.ds1_cluster, args.ds1_genes],
         "dataset2": [args.ds2, ds2_name, args.ds2_cluster, args.ds2_genes],
+        "features": args.features,
         "distance": args.distance,
         "sigma": args.sigma,
         "iterations": args.n_iter,
@@ -199,7 +209,7 @@ def run(args: argparse.Namespace):
     ds2 = Dataset(name=args.ds2_name, file=args.ds2)
     ds2.prepare(group_by=args.ds2_cluster, gene_symbol=args.ds2_genes)
 
-    a, b = internal_preprocessing(ds1, ds2)
+    a, b = internal_preprocessing(ds1, ds2, features_file=args.features)
 
     dist_mean, dist_std, _ = compare(
         a.adata,

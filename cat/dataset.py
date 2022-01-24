@@ -1,5 +1,6 @@
 import logging
 import sys
+from cmath import log
 from pathlib import Path
 from typing import Any, Optional
 
@@ -12,10 +13,12 @@ class Dataset:
     def __init__(self, name: str, file: str):
 
         if name == "" or file == "":
-            raise ValueError(f"You forgot to provide all necessary parameters!")
+            logging.error(f"You forgot to provide all necessary parameters!")
+            sys.exit(1)
 
         if not Path(file).exists():
-            raise ValueError(f"Provided {file} doesn't exists!")
+            logging.error(f"Provided {file} doesn't exists!")
+            sys.exit(1)
 
         self.adata = anndata.read_h5ad(file)
         self.name = name
@@ -45,7 +48,8 @@ class Dataset:
 
         # check if they are really gene symbols and not Ensembl IDs
         if self.adata.var_names[0].startswith("ENS"):
-            raise "`var_names` should contain gene symbols!"
+            logging.error("`var_names` should contain gene symbols!")
+            sys.exit(1)
 
     def _filter_genes(self, gene_type: str, pattern: Any):
         to_filter = self.adata.var_names.str.startswith(pattern)
