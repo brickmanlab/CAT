@@ -126,3 +126,4 @@ dmypy.json
 .vscode/
 datasets/
 results/
+other/
