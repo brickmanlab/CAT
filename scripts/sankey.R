@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 
-library(optparse)
-library(plotly)
-library(plyr)
-library(dplyr)
-library(readxl)
-library(stringr)
+suppressMessages(library(optparse))
+suppressMessages(library(plotly))
+suppressMessages(library(plyr))
+suppressMessages(library(dplyr))
+suppressMessages(library(readxl))
+suppressMessages(library(stringr))
 
 parse_sheet <- function(excel_sheet, excel_file) {
   df <- readxl::read_excel(excel_file, sheet = excel_sheet)
@@ -53,6 +53,14 @@ parser <- add_option(parser, "--output", type="character", default="./figures/",
 parser <- add_option(parser, "--sig_only", action="store_true", default=TRUE, help="Plots only significant connections")
 parser <- add_option(parser, "--skip", type="character", default=NULL, help="Clusters names to skip separated by comma", metavar="character")
 args <- parse_args(parser)
+
+if (is.null(args$excel)) {
+  stop("CAT excel results not provided!")
+}
+
+if (!dir.exists(args$output)) {
+  dir.create(args$output, recursive=TRUE)
+}
 
 cat_res <- parse_excel(args$excel, args$sig_only, args$skip)
 
