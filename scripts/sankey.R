@@ -84,12 +84,14 @@ fig <- plot_ly(
     color = cat_res$df$color,
     value =  cat_res$df$value
   )
-) %>% layout(font = list(size = 20))
+) %>% layout(font = list(size = 20)) %>%
+  config(
+    toImageButtonOptions = list(
+      format = "svg"
+    )
+  )
 
 htmlwidgets::saveWidget(
   as_widget(fig), 
   paste0(args$output, "/", str_replace(basename(args$excel), '.xlsx', ''), '.html')
 )
-
-# fig.write_image("surface-plot.svg", engine="kaleido")
-# htmlwidgets::saveWidget(fig, paste0(args$ouput, "/index.html"))
