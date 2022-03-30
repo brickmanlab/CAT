@@ -21,7 +21,7 @@ def init_logger(verbose: bool):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=f"Some interesting description ...")
+    parser = argparse.ArgumentParser(description=f"Cluster Alignment Tool (CAT)")
     parser.add_argument(
         "--ds1",
         action="store",
@@ -85,7 +85,7 @@ def main():
         "--sigma", type=float, default=1.6, help="Sigma cutoff (1.6 => p-value: 0.05)"
     )
     parser.add_argument(
-        "--n_iter", type=int, default=1_000, help="Number of boostraps, default 1,000"
+        "--n_iter", type=int, default=1_000, help="Number of bootstraps, default 1,000"
     )
     parser.add_argument(
         "--format",
