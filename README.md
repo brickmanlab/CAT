@@ -11,7 +11,7 @@ pip install -e .
 ## How to run
 
 ```bash
-catcli \
+$ catcli \
     --ds1 ds1.h5ad \
     --ds1_name DS1 \
     --ds1_cluster seurat_clusters \
@@ -21,7 +21,7 @@ catcli \
     --output ./results/ds1-vs-ds2
 
 # generate sankey plot
-Rscript ./CAT/scripts/sankey.R \
+$ Rscript ./CAT/scripts/sankey.R \
   --excel ./results/ds1-vs-ds2/ds1_ds2_euclidean.xlsx \
   --output ./results/ds1-vs-ds2/
 ```
@@ -29,9 +29,8 @@ Rscript ./CAT/scripts/sankey.R \
 ## Help
 
 ```bash
-conda activate cat
-
-user@computer$ catcli --help
+$ conda activate cat
+$ catcli --help
 usage: catcli [-h] [--ds1 DS1] [--ds1_name DS1_NAME]
               [--ds1_cluster DS1_CLUSTER] [--ds1_genes DS1_GENES] [--ds2 DS2]
               [--ds2_name DS2_NAME] [--ds2_cluster DS2_CLUSTER]
