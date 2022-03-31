@@ -14,6 +14,7 @@ setup(
     python_requires=">=3.7.*",
     description="Cluster Alignment Tool",
     long_description=README,
+    long_description_content_type="text/markdown",
     author="Alex Valentin Nielsen, Martin Proks, Ala Trusina",
     author_email="alexander.nielsen@nbi.ku.dk",
     url="https://github.com/brickmanlab/CAT",
