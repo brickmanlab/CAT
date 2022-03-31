@@ -11,8 +11,8 @@ with open("requirements.txt") as f:
 setup(
     name="CAT",
     version=__version__,
-    python_requires=">=3.6.*",
-    description="Distance thingy",
+    python_requires=">=3.7.*",
+    description="Cluster Alignment Tool",
     long_description=README,
     author="Alex Valentin Nielsen, Martin Proks, Ala Trusina",
     author_email="alexander.nielsen@nbi.ku.dk",
