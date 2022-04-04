@@ -9,7 +9,7 @@ with open("requirements.txt") as f:
     INSTALL_REQUIREMENTS = f.read().splitlines()
 
 setup(
-    name="CAT",
+    name="cat-python",
     version=__version__,
     python_requires=">=3.7.*",
     description="Cluster Alignment Tool",

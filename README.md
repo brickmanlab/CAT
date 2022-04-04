@@ -1,5 +1,11 @@
 # Cluster Alignment Tool (CAT)
 
+## Install with pip
+
+```bash
+pip install cat-python
+```
+
 ## Install from source
 
 ```bash

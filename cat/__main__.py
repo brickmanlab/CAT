@@ -102,7 +102,7 @@ def main():
     parser.add_argument(
         "--version",
         action="version",
-        version=f"CAT v{pkg_resources.require('cat')[0].version}",
+        version=f"CAT v{pkg_resources.require('cat-python')[0].version}",
     )
 
     args = parser.parse_args()
