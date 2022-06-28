@@ -1,23 +1,13 @@
 import argparse
-import logging
 import warnings
 
-import pkg_resources
-
+from . import __version__
 from .cat import run
+from .utils import init_logger
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 warnings.simplefilter(action="ignore", category=DeprecationWarning)
 warnings.simplefilter(action="ignore", category=RuntimeWarning)
-
-
-def init_logger(verbose: bool):
-    logger = logging.getLogger(__name__)
-    logger_format = (
-        "[%(filename)s->%(funcName)s():%(lineno)s]%(levelname)s: %(message)s"
-    )
-    logging.basicConfig(format=logger_format, level=logging.INFO)
-    logger.setLevel(logging.DEBUG if verbose else logging.INFO)
 
 
 def main():
@@ -99,11 +89,7 @@ def main():
         action="store_true",
         help="Verbose mode",
     )
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=f"CAT v{pkg_resources.require('cat-python')[0].version}",
-    )
+    parser.add_argument("--version", action="version", version=f"CAT v{__version__}")
 
     args = parser.parse_args()
     init_logger(args.verbose)

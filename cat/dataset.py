@@ -1,6 +1,5 @@
 import logging
 import sys
-from cmath import log
 from pathlib import Path
 from typing import Any, Optional
 
@@ -39,7 +38,7 @@ class Dataset:
             self.name + "_" + self.adata.obs[group_by].astype(str)
         )
 
-    def _fix_genes(self, gene_symbol: str):
+    def _fix_genes(self, gene_symbol: Optional[str] = None):
         if gene_symbol is not None and gene_symbol in self.adata.var_keys():
             self.adata.var.index = self.adata.var[gene_symbol].to_numpy()
 

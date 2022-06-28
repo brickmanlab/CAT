@@ -50,7 +50,7 @@ def generate_tables(dist_mean: pd.DataFrame, dist_std: pd.DataFrame, sigma_th: f
         In the example above, we get the distances from "example_cluster" in the dataset with name: "dataset_name_from", compared
         to all clusters in the dataset with the name: dataset_name_to.
     """
-    tables = {name.split("_")[0]: {} for name in dist_mean.columns}
+    tables: Dict[str, Any] = {name.split("_")[0]: {} for name in dist_mean.columns}
     pairwise = list(itertools.product(tables.keys(), repeat=2))
 
     for ds1_name, ds2_name in pairwise:

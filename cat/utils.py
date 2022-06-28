@@ -1,11 +1,21 @@
-import glob
 import logging
 import sys
 from pathlib import Path
-from typing import Dict, List
+from typing import List
 
 import numpy as np
 import pandas as pd
+
+
+def init_logger(verbose: bool):
+    logger = logging.getLogger(__name__)
+    logger_format = (
+        "[%(filename)s->%(funcName)s():%(lineno)s]%(levelname)s: %(message)s"
+        if verbose
+        else "[%(levelname)s]: %(message)s"
+    )
+    logging.basicConfig(format=logger_format, level=logging.INFO)
+    logger.setLevel(logging.DEBUG if verbose else logging.INFO)
 
 
 def get_nz_mean(mat: np.ndarray):
@@ -22,3 +32,10 @@ def read_features(file: str) -> List[str]:
         sys.exit(1)
 
     return pd.read_table(file, header=None)[0].str.lower().tolist()
+
+
+def rename_dataset(names: List[str]):
+    return [
+        name.replace("(", "").replace(")", "").replace(".", "_").replace(" ", "")
+        for name in names
+    ]

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-__version__ = "1.0"
+import cat
 
 with open("README.md") as f:
     README = f.read()
@@ -10,7 +10,7 @@ with open("requirements.txt") as f:
 
 setup(
     name="cat-python",
-    version=__version__,
+    version=cat.__version__,
     python_requires=">=3.7.*",
     description="Cluster Alignment Tool",
     long_description=README,

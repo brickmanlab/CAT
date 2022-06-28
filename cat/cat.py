@@ -1,7 +1,6 @@
 import argparse
 import logging
 import sys
-from cmath import log
 from typing import Any, Dict, List, Optional, Tuple
 
 import anndata
@@ -9,12 +8,11 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy
-from pyexpat import features
 from tqdm import tqdm
 
 from .dataset import Dataset
 from .report import generate_tables, save_tables
-from .utils import get_nz_median, read_features
+from .utils import get_nz_median, read_features, rename_dataset
 
 
 def normalize(mat: np.ndarray, method="median"):
@@ -54,7 +52,6 @@ def internal_preprocessing(
         features = read_features(features_file)
         genes = genes & set(features)
         logging.info(f"Reading list of genes from {features_file} => {len(genes)}")
-    genes = list(genes)
 
     if len(genes) == 0:
         logging.error(f"No common genes found ...")
@@ -62,8 +59,8 @@ def internal_preprocessing(
     elif len(genes) < 20:
         logging.warning("Only <20 genes are common ...")
     else:
-        ds1.adata = ds1.adata[:, genes].copy()
-        ds2.adata = ds2.adata[:, genes].copy()
+        ds1.adata = ds1.adata[:, list(genes)].copy()
+        ds2.adata = ds2.adata[:, list(genes)].copy()
 
     logging.info(f"After {ds1.name}: {ds1.adata.shape}")
     logging.info(f"After {ds2.name}: {ds2.adata.shape}")
@@ -180,19 +177,12 @@ def compare(
     return dist_mean_df, dist_std_df, dist_df
 
 
-def rename(names: List[str]):
-    return [
-        name.replace("(", "").replace(")", "").replace(".", "_").replace(" ", "")
-        for name in names
-    ]
-
-
 def run(args: argparse.Namespace):
     if not (args.ds1 or args.ds1_cluster or args.ds2 or args.ds2_cluster):
         logging.error("Two datasets with specified cluster column are required")
         sys.exit(1)
 
-    ds1_name, ds2_name = rename([args.ds1_name, args.ds2_name])
+    ds1_name, ds2_name = rename_dataset([args.ds1_name, args.ds2_name])
 
     settings: Dict[str, Any] = {
         "dataset1": [args.ds1, ds1_name, args.ds1_cluster, args.ds1_genes],
