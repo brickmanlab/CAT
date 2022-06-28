@@ -86,6 +86,20 @@ def internal_preprocessing(
     return ds1, ds2
 
 
+def bootstrap(adata: anndata.AnnData, clusters: np.array, distance: str):
+    subset = adata[sample_cells(adata, replace=True), :]
+
+    # FIFTH - CLUSTER AVERAGES
+    cluster_means = (
+        (subset.to_df().groupby(adata.obs.cat_cluster.values).mean())
+        .loc[clusters, :]
+        .values
+    )
+
+    # SIXTH - CALCULATE DISTANCES FOR THIS BOOTSTRAP ITERATION
+    return scipy.spatial.distance.pdist(cluster_means, metric=distance)
+
+
 def compare(
     dataset1: anndata.AnnData,
     dataset2: anndata.AnnData,
@@ -127,54 +141,30 @@ def compare(
     adata.X = normalize(adata.X, method="median")
 
     # FOURTH - BOOTSTRAP
-    distances = []
-    for _ in tqdm(range(n_iterations)):
-
-        subsampled_cells = sample_cells(adata, replace=True)
-        subset = adata[subsampled_cells, :]
-
-        # FIFTH - CLUSTER AVERAGES
-        cluster_means_df = (
-            subset.to_df().groupby(subset.obs.cat_cluster.tolist()).mean()
-        )
-        cluster_means_df = cluster_means_df.loc[
-            np.sort(subset.obs.cat_cluster.cat.categories), :
+    clusters = np.sort(adata.obs.cat_cluster.cat.categories)
+    distances = np.array(
+        [
+            bootstrap(adata, clusters=clusters, distance=distance)
+            for _ in tqdm(range(n_iterations))
         ]
-        assert np.all(
-            np.array(cluster_means_df.index) == np.sort(cluster_means_df.index)
-        )
-
-        # SIXTH - CALCULATE DISTANCES FOR THIS BOOTSTRAP ITERATION
-        distances.append(
-            scipy.spatial.distance.pdist(cluster_means_df.values, metric=distance)
-        )
+    )
 
     # SEVENTH - GATHER RESULT - MEAN and STD
-    dist_mean = np.array(distances).mean(axis=0)
-    dist_std = np.array(distances).std(axis=0)
+    dist_mean, dist_std = distances.mean(axis=0), distances.std(axis=0)
 
     dist_mean_df = pd.DataFrame(
         scipy.spatial.distance.squareform(dist_mean),
-        index=cluster_means_df.index,
-        columns=cluster_means_df.index,
+        index=clusters,
+        columns=clusters,
     )
 
     dist_std_df = pd.DataFrame(
         scipy.spatial.distance.squareform(dist_std),
-        index=cluster_means_df.index,
-        columns=cluster_means_df.index,
+        index=clusters,
+        columns=clusters,
     )
 
-    dist_df = [
-        pd.DataFrame(
-            scipy.spatial.distance.squareform(i),
-            index=cluster_means_df.index,
-            columns=cluster_means_df.index,
-        )
-        for i in distances
-    ]
-
-    return dist_mean_df, dist_std_df, dist_df
+    return dist_mean_df, dist_std_df
 
 
 def run(args: argparse.Namespace):
@@ -202,7 +192,7 @@ def run(args: argparse.Namespace):
 
     a, b = internal_preprocessing(ds1, ds2, features_file=args.features)
 
-    dist_mean, dist_std, _ = compare(
+    dist_mean, dist_std = compare(
         a.adata,
         b.adata,
         n_iterations=args.n_iter,
