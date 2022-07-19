@@ -8,11 +8,12 @@ import numpy as np
 import pandas as pd
 import scanpy as sc
 import scipy
+from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from .dataset import Dataset
 from .report import generate_tables, save_tables
-from .utils import get_nz_median, read_features, rename_dataset
+from .utils import get_nz_median, read_features, rename_dataset, tqdm_joblib
 
 
 def normalize(mat: np.ndarray, method="median"):
@@ -26,9 +27,7 @@ def normalize(mat: np.ndarray, method="median"):
     sys.exit(1)
 
 
-def sample_cells(adata: anndata.AnnData, replace: bool = True):
-    clusters = adata.obs.cat_cluster
-
+def sample_cells(clusters: pd.Series, replace: bool = True):
     return np.concatenate(
         [
             np.random.choice(x, size=len(x), replace=replace)
@@ -87,13 +86,11 @@ def internal_preprocessing(
 
 
 def bootstrap(adata: anndata.AnnData, clusters: np.array, distance: str):
-    subset = adata[sample_cells(adata, replace=True), :]
+    subset = adata[sample_cells(adata.obs.cat_cluster, replace=True), :].to_df()
 
     # FIFTH - CLUSTER AVERAGES
     cluster_means = (
-        (subset.to_df().groupby(adata.obs.cat_cluster.values).mean())
-        .loc[clusters, :]
-        .values
+        (subset.groupby(adata.obs.cat_cluster.values).mean()).loc[clusters, :].values
     )
 
     # SIXTH - CALCULATE DISTANCES FOR THIS BOOTSTRAP ITERATION
@@ -106,6 +103,7 @@ def compare(
     n_iterations: int = 1_000,
     features: Optional[List[str]] = None,
     distance: str = "euclidean",
+    n_jobs: int = 1,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     CAT routine calculated the inter cluster distances.
@@ -142,12 +140,14 @@ def compare(
 
     # FOURTH - BOOTSTRAP
     clusters = np.sort(adata.obs.cat_cluster.cat.categories)
-    distances = np.array(
-        [
-            bootstrap(adata, clusters=clusters, distance=distance)
-            for _ in tqdm(range(n_iterations))
-        ]
-    )
+
+    with tqdm_joblib(tqdm(total=n_iterations)):
+        distances = np.array(
+            Parallel(n_jobs=n_jobs)(
+                delayed(bootstrap)(adata, clusters, distance)
+                for _ in range(n_iterations)
+            )
+        )
 
     # SEVENTH - GATHER RESULT - MEAN and STD
     dist_mean, dist_std = distances.mean(axis=0), distances.std(axis=0)
@@ -197,6 +197,7 @@ def run(args: argparse.Namespace):
         b.adata,
         n_iterations=args.n_iter,
         distance=args.distance,
+        n_jobs=args.threads,
     )
 
     logging.info(f"Saving results to {args.output}")

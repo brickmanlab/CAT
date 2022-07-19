@@ -75,7 +75,13 @@ def main():
         "--sigma", type=float, default=1.6, help="Sigma cutoff (1.6 => p-value: 0.05)"
     )
     parser.add_argument(
-        "--n_iter", type=int, default=1_000, help="Number of bootstraps, default 1,000"
+        "--n_iter",
+        type=int,
+        default=1_000,
+        help="Number of bootstraps (default: 1,000)",
+    )
+    parser.add_argument(
+        "--threads", type=int, default=1, help="Number of threads (default: 1)"
     )
     parser.add_argument(
         "--format",
