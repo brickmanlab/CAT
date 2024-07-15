@@ -2,7 +2,7 @@ anndata
 Jinja2
 matplotlib
 numpy
-pandas
+pandas>=2.0.0
 scanpy>=1.5.1
 scikit-learn
 scipy

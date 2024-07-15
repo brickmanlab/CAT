@@ -75,7 +75,7 @@ def generate_tables(dist_mean: pd.DataFrame, dist_std: pd.DataFrame, sigma_th: f
                 i - df_per_cluster["dist mean"][0] for i in df_per_cluster["dist mean"]
             ]
             df_per_cluster["diff uncertainty"] = [
-                np.sqrt(i ** 2 + df_per_cluster["dist std"][0] ** 2)
+                np.sqrt(i**2 + df_per_cluster["dist std"][0] ** 2)
                 for i in df_per_cluster["dist std"]
             ]
             df_per_cluster["diff sigma away"] = (
@@ -123,4 +123,4 @@ def save_tables(tables: Dict[str, Any], output: str, dashboard: pd.DataFrame):
                 for idx, row in enumerate(df["significant"]):
                     if row:
                         worksheet.set_row(idx + 1, cell_format=data_format)
-            writer.save()
+            writer.close()

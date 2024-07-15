@@ -11,7 +11,7 @@ with open("requirements.txt") as f:
 setup(
     name="cat-python",
     version=__version__,
-    python_requires=">=3.7.*",
+    python_requires=">=3.7",
     description="Cluster Alignment Tool",
     long_description=README,
     long_description_content_type="text/markdown",
