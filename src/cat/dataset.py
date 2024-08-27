@@ -102,7 +102,7 @@ class Dataset:
         self,
         group_by: str,
         gene_symbol_field: str | None = None,
-        save_path: str = "./tmp",
+        save_path: str | None = None,
     ) -> None:
         """Prepares dataset for CAT analysis
 
@@ -127,7 +127,8 @@ class Dataset:
         self._filter_genes(gene_type="ribosomal", pattern="rp[s,l]")
         self._filter_genes(gene_type="spike", pattern="ercc-")
 
-        # self._save(save_path=save_path)
+        if save_path:
+            self._save(save_path=save_path)
 
 
 @dataclass
