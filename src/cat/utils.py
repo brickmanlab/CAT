@@ -101,4 +101,10 @@ def read_features(file: str) -> list[str]:
         logging.error(f"Provided file {file} not found!")
         sys.exit(1)
 
-    return pl.read_csv(file, has_header=False, separator="\t").get_column("column_1").to_list()
+    return (
+        pl.read_csv(file, has_header=False, separator="\t")
+        .get_column("column_1")
+        .cast(str)
+        .str.to_lowercase()
+        .to_list()
+    )
