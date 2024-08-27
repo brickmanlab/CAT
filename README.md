@@ -3,7 +3,7 @@
 [![Tests][badge-tests]][link-tests]
 [![Documentation][badge-docs]][link-docs]
 
-[badge-tests]: https://img.shields.io/github/actions/workflow/status/matq007/CAT/test.yaml?branch=main
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/brickmanlab/CAT/test.yaml?branch=main
 [link-tests]: https://github.com/brickmanlab/CAT/actions/workflows/test.yml
 [badge-docs]: https://img.shields.io/readthedocs/CAT
 
@@ -59,7 +59,7 @@ If you found a bug, please use the [issue tracker][issue-tracker].
 
 > Rothová, M.M., Nielsen, A.V., Proks, M. et al. Identification of the central intermediate in the extra-embryonic to embryonic endoderm transition through single-cell transcriptomics. Nat Cell Biol 24, 833–844 (2022). https://doi.org/10.1038/s41556-022-00923-x
 
-[issue-tracker]: https://github.com/matq007/CAT/issues
+[issue-tracker]: https://github.com/brickmanlab/CAT/issues
 [changelog]: https://CAT.readthedocs.io/latest/changelog.html
 [link-docs]: https://CAT.readthedocs.io
 [link-api]: https://CAT.readthedocs.io/latest/api.html
