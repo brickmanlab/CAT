@@ -110,13 +110,6 @@ def parse_args() -> argparse.Namespace:
         help="Number of bootstraps, default 1,000",
     )
     parser.add_argument(
-        "--format",
-        type=str,
-        default="excel",
-        choices=["excel"],
-        help="Report output format",
-    )
-    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Verbose mode",
@@ -135,14 +128,6 @@ def main():
     args = parse_args()
     init_logger(args.verbose)
     run(args)
-
-    # match args.command:
-    #     case "run":
-    #         cli_run(args)
-    #     case "plot":
-    #         cli_plot(args)
-    #     case "vis":
-    #         cli_vis(args)
 
 
 if __name__ == "__main__":
