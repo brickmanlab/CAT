@@ -60,13 +60,8 @@ def internal_preprocessing(
     logging.info(f"After {ds2.name}: {ds2.adata.shape}")
 
     if normalize:
-        if not importlib.util.find_spec("scanpy"):
-            raise ImportError("Missing scanpy package! Run pip install scanpy")
-
-        from scanpy.preprocessing import normalize_total
-
-        normalize_total(ds1.adata, target_sum=1)
-        normalize_total(ds2.adata, target_sum=1)
+        ds1.adata.X = ds1.adata.X / ds1.adata.X.sum(axis=1, keepdims=1)
+        ds2.adata.X = ds2.adata.X / ds2.adata.X.sum(axis=1, keepdims=1)
 
     if not np.all(ds1.adata.var_names == ds2.adata.var_names):
         logging.error("Gene intersection between two datasets don't match!")
@@ -98,7 +93,7 @@ def compare(
         First dataset, must contain anndata, with labels for
         each cluster in an obs variable "XXX". Should be normalized.
     dataset2 : Dataset
-        Second dataset, must contain scanpy anndata, with labels for
+        Second dataset, must contain anndata, with labels for
         each cluster in an obs variable "XXX". Should be normalized.
     n_iterations : int, optional
         Number of iterations in the bootstrap process, by default 'value'
