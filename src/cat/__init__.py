@@ -1,4 +1,5 @@
 import argparse
+import importlib.util
 import logging
 import sys
 import warnings
@@ -59,6 +60,9 @@ def internal_preprocessing(
     logging.info(f"After {ds2.name}: {ds2.adata.shape}")
 
     if normalize:
+        if not importlib.util.find_spec("scanpy"):
+            raise ImportError("Missing scanpy package! Run pip install scanpy")
+
         from scanpy.preprocessing import normalize_total
 
         normalize_total(ds1.adata, target_sum=1)
