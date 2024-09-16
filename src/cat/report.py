@@ -7,7 +7,7 @@ import polars as pl
 import scipy
 from xlsxwriter import Workbook
 
-from cat import DELIMITER
+from cat.constants import DELIMITER
 from cat.dataset import DatasetDiff
 
 
@@ -45,8 +45,12 @@ def generate_tables(diff: DatasetDiff, sigma_th: float) -> dict[str, str]:
 
         for cluster in subset_cols:
             # remove self-loop
-            subset_rows = (pl.col("cat_cluster").str.starts_with(ds1_name)) & (pl.col("cat_cluster") != cluster)
-            mean_per_cluster = diff.mean.filter(subset_rows).select([cluster, "cat_cluster"])
+            subset_rows = (pl.col("cat_cluster").str.starts_with(ds1_name)) & (
+                pl.col("cat_cluster") != cluster
+            )
+            mean_per_cluster = diff.mean.filter(subset_rows).select(
+                [cluster, "cat_cluster"]
+            )
             std_per_cluster = diff.std.filter(subset_rows).select(cluster)
 
             tables[ds1_name][ds2_name][cluster] = (
@@ -58,9 +62,18 @@ def generate_tables(diff: DatasetDiff, sigma_th: float) -> dict[str, str]:
                     }
                 )
                 .sort(by="dist_mean")
-                .with_columns(diff_to_closest=pl.col.dist_mean - pl.col.dist_mean.get(0))
-                .with_columns(diff_uncertainty=np.sqrt(pl.col.dist_std**2 + pl.col.dist_std.get(0) ** 2))
-                .with_columns(diff_sigma_away=pl.col.diff_to_closest / pl.col.diff_uncertainty.get(0))
+                .with_columns(
+                    diff_to_closest=pl.col.dist_mean - pl.col.dist_mean.get(0)
+                )
+                .with_columns(
+                    diff_uncertainty=np.sqrt(
+                        pl.col.dist_std**2 + pl.col.dist_std.get(0) ** 2
+                    )
+                )
+                .with_columns(
+                    diff_sigma_away=pl.col.diff_to_closest
+                    / pl.col.diff_uncertainty.get(0)
+                )
                 .with_columns(
                     diff_sigma_away_p=pl.col.diff_sigma_away.map_elements(
                         lambda x: scipy.stats.norm.sf(x), return_dtype=pl.Float32
@@ -72,13 +85,15 @@ def generate_tables(diff: DatasetDiff, sigma_th: float) -> dict[str, str]:
     return tables
 
 
-def to_excel(dashboard: pl.DataFrame, tables: dict[str, str], output: str, distance: str) -> None:
+def to_excel(
+    dashboard: pl.DataFrame, tables: dict[str, str], output: str, distance: str
+) -> None:
     """Generate CAT results to Excel format
 
     Parameters
     ----------
     dashboard : pl.DataFrame
-        Dataframe containing specified parameters
+        :py:class:`polars.DataFrame` Dataframe containing specified parameters
     tables : dict[str, str]
         Pairwise comparisons
     output : str
@@ -94,7 +109,9 @@ def to_excel(dashboard: pl.DataFrame, tables: dict[str, str], output: str, dista
                 dashboard.write_excel(workbook=wb, worksheet="Dashboard")
                 for cluster in tables[ds_from][ds_to]:
                     sheet_name = cluster.replace(" ", "_").replace(":", ".")
-                    tables[ds_from][ds_to][cluster].write_excel(workbook=wb, worksheet=sheet_name)
+                    tables[ds_from][ds_to][cluster].write_excel(
+                        workbook=wb, worksheet=sheet_name
+                    )
 
 
 def save_tables(args: Namespace, tables: dict[str, str]):
@@ -102,8 +119,8 @@ def save_tables(args: Namespace, tables: dict[str, str]):
 
     Parameters
     ----------
-    args : Namespace
-        Cli arguments
+    args
+        :py:class:`argparse.Namespace` Cli arguments
     tables : dict[str, str]
         Tables from generate_tables
     """

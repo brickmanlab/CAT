@@ -8,7 +8,7 @@ import numpy as np
 import polars as pl
 import scipy
 
-from cat import CLUSTER_FIELD, DELIMITER
+from cat.constants import CLUSTER_FIELD, DELIMITER
 
 
 @dataclass
@@ -39,14 +39,18 @@ class Dataset:
             Column in `obs`
         """
         if group_by == "":
-            logging.error("You forgot to specify `group_by` param for cluster comparisons.")
+            logging.error(
+                "You forgot to specify `group_by` param for cluster comparisons."
+            )
             sys.exit(1)
 
         if group_by not in self.adata.obs.columns:
             logging.error(f"Defined column {group_by} not found in the dataset.")
             sys.exit(1)
 
-        self.adata.obs[self.cluster_field] = self.name + DELIMITER + self.adata.obs[group_by].astype(str)
+        self.adata.obs[self.cluster_field] = (
+            self.name + DELIMITER + self.adata.obs[group_by].astype(str)
+        )
 
     def _fix_genes(self, gene_symbol_field: str):
         """Set correct column from `var` to gene symbol.

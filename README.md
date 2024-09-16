@@ -1,18 +1,25 @@
-# CAT
+# Cluster Alignment Tool (CAT)
 
-[![Tests][badge-tests]][link-tests]
-[![Documentation][badge-docs]][link-docs]
+[![PyPI][pypi-badge]][pypi-link]
+[![build][build-badge]][build-link]
+[![Documentation][docs-badge]][docs-link]
 
-[badge-tests]: https://img.shields.io/github/actions/workflow/status/brickmanlab/CAT/test.yaml?branch=main
-[link-tests]: https://github.com/brickmanlab/CAT/actions/workflows/test.yml
-[badge-docs]: https://img.shields.io/readthedocs/CAT
+## Installation
 
-Cluster Alignment Tool (CAT)
+```console
+$ pip install cat-python
+```
 
-## Testing
+## Installation from source
 
-```bash
-catcli \
+```console
+$ pip install git+https://github.com/brickmanlab/CAT.git@main
+```
+
+## Running CAT
+
+```console
+$ catcli \
     --ds1 ./tests/datasets/mock.h5ad \
     --ds1_name DS1 \
     --ds1_cluster Condition_E+D \
@@ -22,45 +29,41 @@ catcli \
     --output ./res
 ```
 
-## Getting started
+## Build documentation
 
-Please refer to the [documentation][link-docs]. In particular, the
-
--   [API documentation][link-api].
-
-## Installation
-
-You need to have Python 3.10 or newer installed on your system. If you don't have
-Python installed, we recommend installing [Mambaforge](https://github.com/conda-forge/miniforge#mambaforge).
-
-There are several alternative options to install CAT:
-
-1. Install the latest release of `cat-python` from [PyPI][link-pypi]:
-
-```bash
-pip install cat-python
+```console
+$ sphinx-build -M html docs docs/_build
 ```
-
-1. Install the latest development version:
-
-```bash
-pip install git+https://github.com/brickmanlab/CAT.git@main
-```
-
-## Release notes
-
-See the [changelog][changelog].
-
-## Contact
-
-If you found a bug, please use the [issue tracker][issue-tracker].
 
 ## Citation
 
-> Rothová, M.M., Nielsen, A.V., Proks, M. et al. Identification of the central intermediate in the extra-embryonic to embryonic endoderm transition through single-cell transcriptomics. Nat Cell Biol 24, 833–844 (2022). https://doi.org/10.1038/s41556-022-00923-x
+Please consider citing scANVI Explainer if you use in your research.
 
-[issue-tracker]: https://github.com/brickmanlab/CAT/issues
-[changelog]: https://CAT.readthedocs.io/latest/changelog.html
-[link-docs]: https://CAT.readthedocs.io
-[link-api]: https://CAT.readthedocs.io/latest/api.html
-[link-pypi]: https://pypi.org/project/CAT
+> Rothová, M.M., Nielsen, A.V., Proks, M. et al. <br>
+> Identification of the central intermediate in the extra-embryonic to embryonic endoderm transition through single-cell transcriptomics. <br>
+> Nat Cell Biol 24, 833–844 (2022). [10.1038/s41556-022-00923-x]
+
+```BibTeX
+@article{rothova2022,
+  title = {Identification of the Central Intermediate in the Extra-Embryonic to Embryonic Endoderm Transition through Single-Cell Transcriptomics},
+  author = {Rothov{\'a}, Michaela Mrugala and Nielsen, Alexander Valentin and Proks, Martin and Wong, Yan Fung and Riveiro, Alba Redo and {Linneberg-Agerholm}, Madeleine and David, Eyal and Amit, Ido and Trusina, Ala and Brickman, Joshua Mark},
+  year = {2022},
+  month = jun,
+  journal = {Nature Cell Biology},
+  volume = {24},
+  number = {6},
+  pages = {833--844},
+  publisher = {Nature Publishing Group},
+  issn = {1476-4679},
+  doi = {10.1038/s41556-022-00923-x}
+}
+
+```
+
+[pypi-badge]: https://img.shields.io/pypi/v/CAT.svg
+[pypi-link]: https://pypi.org/project/CAT
+[docs-badge]: https://readthedocs.org/projects/CAT/badge/?version=latest
+[docs-link]: https://CAT.readthedocs.io
+[build-badge]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml/badge.svg
+[build-link]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml
+[10.1038/s41556-022-00923-x]: https://doi.org/10.1038/s41556-022-00923-x

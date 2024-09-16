@@ -4,8 +4,8 @@ import sys
 
 from rich_argparse import RichHelpFormatter
 
-from cat import N_ITERATIONS, SIGMA, __version__
-from cat.cat import run
+from cat import run
+from cat.constants import N_ITERATIONS, SIGMA, __version__
 
 
 def init_logger(verbose: bool):
@@ -94,9 +94,21 @@ def parse_args() -> argparse.Namespace:
         default="./results",
         help="Output location",
     )
-    parser.add_argument("--distance", type=str, default="euclidean", help="Distance measurement")
-    parser.add_argument("--sigma", type=float, default=SIGMA, help=f"Sigma cutoff ({SIGMA} => p-value: 0.05)")
-    parser.add_argument("--n_iter", type=int, default=N_ITERATIONS, help="Number of bootstraps, default 1,000")
+    parser.add_argument(
+        "--distance", type=str, default="euclidean", help="Distance measurement"
+    )
+    parser.add_argument(
+        "--sigma",
+        type=float,
+        default=SIGMA,
+        help=f"Sigma cutoff ({SIGMA} => p-value: 0.05)",
+    )
+    parser.add_argument(
+        "--n_iter",
+        type=int,
+        default=N_ITERATIONS,
+        help="Number of bootstraps, default 1,000",
+    )
     parser.add_argument(
         "--format",
         type=str,
