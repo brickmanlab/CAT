@@ -10,33 +10,23 @@ import cat
 .. currentmodule:: cat
 ```
 
-## CLI
+## cat
 
 ```{eval-rst}
 .. currentmodule:: cat
+
 .. autosummary::
     :toctree: generated
 
-    cli.init_logger
-    cli.parse_args
-    cli.main
+    internal_preprocessing
+    compare
+    run
 ```
 
-## CAT
+## Dataset and DatasetDiff
 
 ```{eval-rst}
-.. currentmodule:: cat
-.. autosummary::
-    :toctree: generated
-
-    cat.internal_preprocessing
-    cat.compare
-    cat.run
-```
-
-## Dataset
-
-```{eval-rst}
+.. module:: cat.dataset
 .. currentmodule:: cat
 .. autosummary::
     :toctree: generated
@@ -47,19 +37,14 @@ import cat
     Dataset._filter_genes
     Dataset._save
     Dataset.prepare
-```
 
-## DatasetDiff
-
-```{eval-rst}
-.. currentmodule:: cat
-.. autosummary::
-    :toctree: generated
+    DatasetDiff
 ```
 
 ## Report
 
 ```{eval-rst}
+.. module:: cat.report
 .. currentmodule:: cat
 .. autosummary::
     :toctree: generated
@@ -72,6 +57,7 @@ import cat
 ## Utils
 
 ```{eval-rst}
+.. module:: cat.utils
 .. currentmodule:: cat
 .. autosummary::
     :toctree: generated

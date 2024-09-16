@@ -5,26 +5,21 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
-import sys
 from datetime import datetime
 from importlib.metadata import metadata
-from pathlib import Path
-
-HERE = Path(__file__).parent
-sys.path.insert(0, str(HERE / "extensions"))
-
 
 # -- Project information -----------------------------------------------------
 
 # NOTE: If you installed your project in editable mode, this might be stale.
 #       If this is the case, reinstall it to refresh the metadata
-info = metadata("CAT")
+info = metadata("cat")
 project_name = info["Name"]
-author = info["Author"]
+
+author = ", ".join([x.split("<")[0].strip() for x in info["Author-email"].split(",")])
 copyright = f"{datetime.now():%Y}, {author}."
 version = info["Version"]
 urls = dict(pu.split(", ") for pu in info.get_all("Project-URL"))
-repository_url = urls["Source"]
+repository_url = urls["Homepage"]
 
 # The full version, including alpha/beta/rc tags
 release = info["Version"]
@@ -36,9 +31,9 @@ needs_sphinx = "4.0"
 
 html_context = {
     "display_github": True,  # Integrate GitHub
-    "github_user": "matq007",
-    "github_repo": "https://github.com/brickmanlab/CAT",
-    "github_version": "main",
+    "github_user": "brickmanlab",
+    "github_repo": project_name,
+    "github_version": "master",
     "conf_py_path": "/docs/",
 }
 
@@ -48,17 +43,13 @@ html_context = {
 # They can be extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     "myst_nb",
-    "sphinx_copybutton",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinxcontrib.bibtex",
-    "sphinx_autodoc_typehints",
     "sphinx.ext.mathjax",
     "IPython.sphinxext.ipython_console_highlighting",
-    "sphinxext.opengraph",
-    *[p.stem for p in (HERE / "extensions").glob("*.py")],
 ]
 
 autosummary_generate = True
@@ -91,9 +82,13 @@ source_suffix = {
 }
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
     "anndata": ("https://anndata.readthedocs.io/en/stable/", None),
+    "matplotlib": ("https://matplotlib.org/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "polars": ("https://docs.pola.rs/api/python/stable", None),
+    "python": ("https://docs.python.org/3", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
 }
 
 # List of patterns, relative to source directory, that match files and
@@ -108,8 +103,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 # a list of builtin themes.
 #
 html_theme = "sphinx_book_theme"
-html_static_path = ["_static"]
-html_css_files = ["css/custom.css"]
+# html_static_path = ["_static"]
+# html_css_files = ["css/custom.css"]
 
 html_title = project_name
 
@@ -125,5 +120,5 @@ pygments_style = "default"
 nitpick_ignore = [
     # If building the documentation fails because of a missing link that is outside your control,
     # you can add an exception to this list.
-    #     ("py:class", "igraph.Graph"),
+    ("py:class", "type"),
 ]
