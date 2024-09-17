@@ -44,24 +44,22 @@ def generate_tables(diff: DatasetDiff, sigma_th: float) -> dict[str, str]:
     for ds1_name, ds2_name in ds_comparisons:
         tables[ds1_name][ds2_name] = {}
 
-        subset_cols = idxs[idxs.str.startswith(ds2_name)]
+        subset_cols = idxs[idxs.str.startswith(ds1_name)]
 
         for cluster in subset_cols:
             # remove self-loop
-            subset_rows = (pl.col(CLUSTER_FIELD).str.starts_with(ds1_name)) & (
+            subset_rows = (pl.col(CLUSTER_FIELD).str.starts_with(ds2_name)) & (
                 pl.col(CLUSTER_FIELD) != cluster
             )
-            mean_per_cluster = diff.mean.filter(subset_rows).select(
-                [cluster, CLUSTER_FIELD]
-            )
-            std_per_cluster = diff.std.filter(subset_rows).select(cluster)
 
             tables[ds1_name][ds2_name][cluster] = (
                 pl.DataFrame(
                     {
-                        CLUSTER_FIELD: mean_per_cluster.get_column(CLUSTER_FIELD),
-                        "dist_mean": mean_per_cluster.get_column(cluster),
-                        "dist_std": std_per_cluster,
+                        CLUSTER_FIELD: diff.mean.filter(subset_rows).get_column(
+                            CLUSTER_FIELD
+                        ),
+                        "dist_mean": diff.mean.filter(subset_rows).get_column(cluster),
+                        "dist_std": diff.std.filter(subset_rows).get_column(cluster),
                     }
                 )
                 .sort(by="dist_mean")
@@ -114,7 +112,7 @@ def to_excel(args: Namespace, tables: dict[str, str]) -> None:
         for ds_to in tables[ds_from]:
             filename = f"{args.output}/{ds_from}_{ds_to}_{args.distance}.xlsx"
 
-            with Workbook(filename) as wb:
+            with Workbook(filename, {"nan_inf_to_errors": True}) as wb:
                 dashboard.write_excel(workbook=wb, worksheet="Dashboard")
                 for cluster in tables[ds_from][ds_to]:
                     sheet_name = cluster.replace(" ", "_").replace(":", ".")
