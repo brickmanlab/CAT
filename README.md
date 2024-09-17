@@ -60,10 +60,10 @@ Please consider citing scANVI Explainer if you use in your research.
 
 ```
 
-[pypi-badge]: https://img.shields.io/pypi/v/CAT.svg
-[pypi-link]: https://pypi.org/project/CAT
-[docs-badge]: https://readthedocs.org/projects/CAT/badge/?version=latest
-[docs-link]: https://CAT.readthedocs.io
+[pypi-badge]: https://img.shields.io/pypi/v/cat-python.svg
+[pypi-link]: https://pypi.org/project/cat-python
+[docs-badge]: https://readthedocs.org/projects/brickmanlabcat/badge/?version=latest
+[docs-link]: https://brickmanlabcat.readthedocs.io/en/latest/
 [build-badge]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml/badge.svg
 [build-link]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml
 [10.1038/s41556-022-00923-x]: https://doi.org/10.1038/s41556-022-00923-x
