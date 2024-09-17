@@ -21,6 +21,7 @@ dependencies = [
     "anndata",
     "polars",
     "pyarrow",
+    "plotly",
     "rich",
     "rich_argparse",
     "xlsxwriter"
