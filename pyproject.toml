@@ -1,0 +1,57 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+name = "CAT"
+version = "1.1.0"
+description = "Cluster Alignment Tool (CAT)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Alex Valentin Nielsen", email = "alexander.nielsen@nbi.ku.dk"},
+    {name = "Martin Proks", email = "martin.proks@sund.ku.dk"},
+    {name= "Ala Trusina", email = "trusina@nbi.ku.dk"}
+]
+maintainers = [
+    {name = "Martin Proks", email = "martin.proks@sund.ku.dk"},
+]
+dependencies = [
+    "anndata",
+    "polars",
+    "pyarrow",
+    "plotly",
+    "rich",
+    "rich_argparse",
+    "xlsxwriter"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.10"
+]
+
+[project.scripts]
+catcli = "cat.cli:main"
+
+[project.optional-dependencies]
+dev = ["pre-commit"]
+doc = [
+  "setuptools",
+  "sphinx>=4.0",
+  "myst-nb>=1.1",
+  "sphinx-book-theme>=1",
+  "sphinxcontrib-bibtex>=1"
+]
+
+[project.urls]
+Documentation = "https://CAT.readthedocs.io/"
+Source = "https://github.com/brickmanlab/CAT"
+Homepage = "https://github.com/brickmanlab/CAT"
+
+[tool.ruff]
+lint.ignore = ["E731"]
