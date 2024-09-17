@@ -12,7 +12,7 @@ from importlib.metadata import metadata
 
 # NOTE: If you installed your project in editable mode, this might be stale.
 #       If this is the case, reinstall it to refresh the metadata
-info = metadata("cat")
+info = metadata("cat-python")
 project_name = info["Name"]
 
 author = ", ".join([x.split("<")[0].strip() for x in info["Author-email"].split(",")])
