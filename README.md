@@ -13,7 +13,7 @@ $ pip install cat-python
 ## Installation from source
 
 ```console
-$ pip install git+https://github.com/brickmanlab/CAT.git@main
+$ pip install git+https://github.com/brickmanlab/cat-python.git@master
 ```
 
 ## Running CAT
@@ -64,6 +64,6 @@ Please consider citing scANVI Explainer if you use in your research.
 [pypi-link]: https://pypi.org/project/cat-python
 [docs-badge]: https://readthedocs.org/projects/brickmanlabcat/badge/?version=latest
 [docs-link]: https://brickmanlabcat.readthedocs.io/en/latest/
-[build-badge]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml/badge.svg
-[build-link]: https://github.com/brickmanlab/CAT/actions/workflows/build.yml
+[build-badge]: https://github.com/brickmanlab/cat-python/actions/workflows/build.yml/badge.svg
+[build-link]: https://github.com/brickmanlab/cat-python/actions/workflows/build.yml
 [10.1038/s41556-022-00923-x]: https://doi.org/10.1038/s41556-022-00923-x

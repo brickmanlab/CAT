@@ -117,7 +117,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--version",
         action="version",
-        version=f"CAT v{__version__}",
+        version=f"cat-python v{__version__}",
     )
 
     return parser.parse_args(args=None if sys.argv[1:] else ["--help"])

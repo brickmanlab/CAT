@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning][].
 
 ### Fixed
 
-- Error in saving XlsxWriter [#2](https://github.com/brickmanlab/CAT/issues/2)
+- Error in saving XlsxWriter [#2](https://github.com/brickmanlab/cat-python/issues/2)
 
 ## [v1.0]
 

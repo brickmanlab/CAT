@@ -3,7 +3,7 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-name = "CAT"
+name = "cat-python"
 version = "1.1.0"
 description = "Cluster Alignment Tool (CAT)"
 readme = "README.md"
@@ -49,9 +49,12 @@ doc = [
 ]
 
 [project.urls]
-Documentation = "https://CAT.readthedocs.io/"
-Source = "https://github.com/brickmanlab/CAT"
-Homepage = "https://github.com/brickmanlab/CAT"
+Documentation = "https://brickmanlabcat.readthedocs.io/"
+Source = "https://github.com/brickmanlab/cat-python"
+Homepage = "https://github.com/brickmanlab/cat-python"
 
 [tool.ruff]
 lint.ignore = ["E731"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cat"]
