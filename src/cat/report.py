@@ -215,7 +215,7 @@ def to_html(args: Namespace, tables: dict[str, str]) -> None:
 
             # Sankey plots
             for item_from, item_to in comparisons[ds_from][ds_to].items():
-                sources += [labels.index(item_from)]
+                sources += [labels.index(item_from) for _ in item_to]
                 targets += [labels.index(x.get(CLUSTER_FIELD, "N/A")) for x in item_to]
                 values += [x.get("dist_mean", "N/A") for x in item_to]
 
