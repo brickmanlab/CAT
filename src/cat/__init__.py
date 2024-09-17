@@ -117,9 +117,12 @@ def compare(
         adata = adata[:, features].copy()
 
     # THIRD - NORMALIZE BY MEDIAN GENE
-    df = pl.DataFrame(
-        normalize(adata.X, method="median"), schema=adata.var_names.tolist()
-    ).with_columns(pl.Series(name=CLUSTER_FIELD, values=adata.obs[CLUSTER_FIELD]))
+    # Ignore Warning because nzm can return NaN, which is further fixed
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        df = pl.DataFrame(
+            normalize(adata.X, method="median"), schema=adata.var_names.tolist()
+        ).with_columns(pl.Series(name=CLUSTER_FIELD, values=adata.obs[CLUSTER_FIELD]))
 
     distances = []
     partitions: dict[str, pl.DataFrame] = df.partition_by(
