@@ -10,6 +10,29 @@ and this project adheres to [Semantic Versioning][].
 
 ## [Unreleased]
 
+## [v1.1.0]
+
+> [!WARNING]
+> **Breaking changes**
+> New changes to the API, please see the documentation
+
 ### Added
 
--   Basic tool, preprocessing and plotting functions
+- Build check with automatic Pypi release
+
+### Changed
+
+- New API documentation
+- Switch to `uv` as package manager
+- Sankey plots are generated with new Python code, removed the old R script
+- Silence `RuntimeWarning` message when performing median normalization
+
+## [v1.0.1]
+
+### Fixed
+
+- Error in saving XlsxWriter [#2](https://github.com/brickmanlab/CAT/issues/2)
+
+## [v1.0]
+
+Initial release for publication
