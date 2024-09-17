@@ -40,7 +40,9 @@ def get_nz_median(mat: ArrayLike) -> np.ndarray:
     return np.apply_along_axis(lambda v: np.median(v[np.nonzero(v)]), 0, mat)
 
 
-def normalize(mat: ArrayLike, method: Literal["median", "mean"] = "median") -> np.ndarray:
+def normalize(
+    mat: ArrayLike, method: Literal["median", "mean", "to_one"] = "median"
+) -> np.ndarray:
     """Normalize count matrix
 
     Parameters
@@ -81,7 +83,10 @@ def rename_ds(names: list[str]) -> list[str]:
     list[str]
         Renamed dataset names
     """
-    return [name.replace("(", "").replace(")", "").replace(".", "_").replace(" ", "") for name in names]
+    return [
+        name.replace("(", "").replace(")", "").replace(".", "_").replace(" ", "")
+        for name in names
+    ]
 
 
 def read_features(file: str) -> list[str]:

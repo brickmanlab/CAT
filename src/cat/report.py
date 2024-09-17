@@ -221,21 +221,26 @@ def to_html(args: Namespace, tables: dict[str, str]) -> None:
                 targets += [labels.index(x.get(CLUSTER_FIELD, "N/A")) for x in item_to]
                 values += [x.get("dist_mean", "N/A") for x in item_to]
 
-                go.Figure(
-                    data=[
-                        go.Sankey(
-                            arrangement="snap",
-                            node=dict(
-                                pad=15,
-                                thickness=20,
-                                line=dict(color="black", width=0.5),
-                                label=labels,
-                                color="blue",
-                            ),
-                            link=dict(source=sources, target=targets, value=values),
-                        )
-                    ]
-                ).write_html(f"{args.output}/{ds_from}_{ds_to}_{args.distance}.html")
+            go.Figure(
+                data=[
+                    go.Sankey(
+                        arrangement="snap",
+                        node=dict(
+                            pad=15,
+                            thickness=20,
+                            line=dict(color="black", width=0.5),
+                            label=labels,
+                        ),
+                        link=dict(
+                            source=sources,
+                            target=targets,
+                            value=values,
+                            hovertemplate="From: %{source.label}<br />"
+                            + "To: %{target.label}<br />Value: %{value}",
+                        ),
+                    )
+                ]
+            ).write_html(f"{args.output}/{ds_from}_{ds_to}_{args.distance}.html")
 
 
 def save_tables(args: Namespace, tables: dict[str, str]):
