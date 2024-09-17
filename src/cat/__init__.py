@@ -63,7 +63,7 @@ def internal_preprocessing(
         ds2.adata.X = ds2.adata.X / ds2.adata.X.sum(axis=1, keepdims=1)
 
     if not np.all(ds1.adata.var_names == ds2.adata.var_names):
-        logging.error("Gene intersection between two datasets don't match!")
+        logging.error("Gene intersection between two datasets doesn't match!")
         sys.exit(1)
 
     # Make sure the normalization is good
